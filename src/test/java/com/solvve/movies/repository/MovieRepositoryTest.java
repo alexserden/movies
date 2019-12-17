@@ -17,10 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Sql(statements = "delete from movie", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @ActiveProfiles("test")
 public class MovieRepositoryTest {
+
     @Autowired
     private MovieRepository movieRepository;
+
     @Test
-    public void testSave(){
+    public void testSave() {
         Movie m = new Movie();
         m = movieRepository.save(m);
         assertNotNull(m.getId());
