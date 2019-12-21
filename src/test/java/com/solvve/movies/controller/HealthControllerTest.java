@@ -1,5 +1,6 @@
 package com.solvve.movies.controller;
 
+import com.solvve.movies.service.MovieService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@WebMvcTest(controllers = HealthController.class)
 public class HealthControllerTest {
 
     @Autowired
