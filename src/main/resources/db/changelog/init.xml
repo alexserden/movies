@@ -16,6 +16,30 @@
             <column name="duration" type="integer"/>
             <column name="description" type="varchar(255)"/>
         </createTable>
+
+        <createTable tableName="director">
+        <column name="id" type="uuid">
+            <constraints primaryKey="true"/>
+        </column>
+        <column name="name" type="varchar(60)"/>
+        </createTable>
+
+<createTable tableName="director_movies">
+    <column name="directors_id" type="uuid">
+        <constraints nullable="false" />
+    </column>
+    <column name="movies_id" type="uuid">
+        <constraints nullable="false" />
+    </column>
+</createTable>
+
+        <addForeignKeyConstraint constraintName="fk_director"
+                                 baseTableName="director_movies" baseColumnNames="directors_id"
+                                 referencedTableName="director" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_movie"
+                                 baseTableName="director_movies" baseColumnNames="movies_id"
+                                 referencedTableName="movie" referencedColumnNames="id" />
+
     </changeSet>
 
 </databaseChangeLog>

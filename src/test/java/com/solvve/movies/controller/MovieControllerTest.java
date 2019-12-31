@@ -1,9 +1,12 @@
 package com.solvve.movies.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solvve.movies.domain.Movie;
 import com.solvve.movies.dto.MovieReadDTO;
+import com.solvve.movies.exception.EntityNotFoundException;
 import com.solvve.movies.service.MovieService;
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -51,5 +54,25 @@ public class MovieControllerTest {
         MovieReadDTO actualMovie = objectMapper.readValue(resultJson,MovieReadDTO.class);
         Assertions.assertThat(actualMovie).isEqualToComparingFieldByField(movieReadDTO);
         Mockito.verify(movieService).getMovie(movieReadDTO.getId());
+    }
+
+    @Test
+    public void testGetMovieWrongId() throws Exception {
+        UUID wrongId = UUID.randomUUID();
+
+        EntityNotFoundException exception = new EntityNotFoundException(Movie.class, wrongId);
+        Mockito.when(movieService.getMovie(wrongId)).thenThrow(exception);
+
+        String resultJson = mvc.perform(get("/api/v1/movies/{id}", wrongId))
+                .andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString();
+
+        Assert.assertTrue(resultJson.contains(exception.getMessage()));
+    }
+
+    @Test
+    public void testGetMovieWrongFormatId() throws Exception {
+        String wrongFormatId = "123";
+        mvc.perform(get("/api/v1/movies/{id}", wrongFormatId))
+                .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
     }
 }
