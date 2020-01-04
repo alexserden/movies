@@ -1,10 +1,12 @@
 package com.solvve.movies.service;
 
 import com.solvve.movies.domain.Movie;
+import com.solvve.movies.dto.MovieCreateDTO;
 import com.solvve.movies.dto.MovieReadDTO;
 import com.solvve.movies.exception.EntityNotFoundException;
 import com.solvve.movies.repository.MovieRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,24 @@ public class MovieServiceTest {
     @Test(expected = EntityNotFoundException.class)
     public void testGetMovieWrongId(){
         movieService.getMovie(UUID.randomUUID());
+    }
+
+    @Test
+    public void  testCreateMovie(){
+        MovieCreateDTO create = new MovieCreateDTO();
+        create.setTitle("One at home");
+        create.setCountry("USA");
+        create.setGenre("Comedy");
+        create.setYear(1992);
+        create.setDuration(2345);
+        create.setDescription("This comedy for family");
+
+        MovieReadDTO read = movieService.createMovie(create);
+        Assertions.assertThat(create).isEqualToComparingFieldByField(read);
+        Assert.assertNotNull(read.getId());
+
+        Movie m = movieRepository.findById(read.getId()).get();
+        Assertions.assertThat(read).isEqualToComparingFieldByField(m);
     }
 }
 

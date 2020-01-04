@@ -1,5 +1,6 @@
 package com.solvve.movies.controller;
 
+import com.solvve.movies.dto.MovieCreateDTO;
 import com.solvve.movies.dto.MovieReadDTO;
 import com.solvve.movies.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,10 @@ public class MovieController {
     public MovieReadDTO getMovie(@PathVariable @NotNull UUID id) {
         MovieReadDTO m = movieService.getMovie(id);
         return m;
+    }
+
+    @PostMapping
+    public MovieReadDTO createMovie(@RequestBody MovieCreateDTO movieCreateDTO){
+      return movieService.createMovie(movieCreateDTO);
     }
 }

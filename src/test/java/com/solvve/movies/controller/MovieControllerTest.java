@@ -2,6 +2,7 @@ package com.solvve.movies.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solvve.movies.domain.Movie;
+import com.solvve.movies.dto.MovieCreateDTO;
 import com.solvve.movies.dto.MovieReadDTO;
 import com.solvve.movies.exception.EntityNotFoundException;
 import com.solvve.movies.service.MovieService;
@@ -13,11 +14,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -74,5 +77,36 @@ public class MovieControllerTest {
         String wrongFormatId = "123";
         mvc.perform(get("/api/v1/movies/{id}", wrongFormatId))
                 .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+    }
+
+    @Test
+    public void  testCreateMovie() throws Exception {
+        MovieCreateDTO create = new MovieCreateDTO();
+        create.setTitle("One at home");
+        create.setCountry("USA");
+        create.setGenre("Comedy");
+        create.setYear(1992);
+        create.setDuration(2345);
+        create.setDescription("This comedy for family");
+
+        MovieReadDTO read = new MovieReadDTO();
+        read.setId(UUID.randomUUID());
+        read.setTitle("One at home");
+        read.setCountry("USA");
+        read.setGenre("Comedy");
+        read.setYear(1992);
+        read.setDuration(2345);
+        read.setDescription("This comedy for family");
+
+        Mockito.when(movieService.createMovie(create)).thenReturn(read);
+
+        String resultJson =  mvc.perform(post("/api/v1/movies")
+                .content(objectMapper.writeValueAsString(create))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        MovieReadDTO actualRead = objectMapper.readValue(resultJson, MovieReadDTO.class);
+        Assertions.assertThat(actualRead).isEqualToComparingFieldByField(read);
     }
 }
