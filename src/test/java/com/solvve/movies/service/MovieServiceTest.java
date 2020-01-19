@@ -56,7 +56,8 @@ public class MovieServiceTest {
         create.setYear(1992);
         create.setDuration(2345);
         create.setDescription("This comedy for family");
-
+        List<Director> directors = new ArrayList<>();
+        create.setDirectors(directors);
         MovieReadDTO read = movieService.createMovie(create);
         Assertions.assertThat(create).isEqualToComparingFieldByField(read);
         Assert.assertNotNull(read.getId());
@@ -68,8 +69,6 @@ public class MovieServiceTest {
     @Test
     public void testPatchMovie() {
         Movie m =  createMovie();
-        m = movieRepository.save(m);
-
         MoviePatchDTO moviePatchDTO = new MoviePatchDTO();
         moviePatchDTO.setTitle("Second at home");
         moviePatchDTO.setCountry("UK");
@@ -90,8 +89,6 @@ public class MovieServiceTest {
     @Test
     public void testPatchMovieEmptyPatch() {
         Movie m = createMovie();
-        m = movieRepository.save(m);
-
         MoviePatchDTO patch = new MoviePatchDTO();
         MovieReadDTO read = movieService.patchMovie(m.getId(), patch);
 
@@ -118,8 +115,8 @@ public class MovieServiceTest {
 
     @Test
     public void testDeleteMovie() {
-        Movie m = createMovie();
 
+        Movie m = createMovie();
         movieService.deleteMovie(m.getId());
         Assert.assertFalse(movieRepository.existsById(m.getId()));
     }
@@ -138,6 +135,7 @@ public class MovieServiceTest {
         m.setDescription("This comedy for family");
         List<Director> directors = new ArrayList<>();
         m.setDirectors(directors);
+        movieRepository.save(m);
         return m;
     }
 }
