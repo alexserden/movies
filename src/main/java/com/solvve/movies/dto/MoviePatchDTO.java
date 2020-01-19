@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 import java.util.List;
 
 @Data
-public class MovieCreateDTO {
+public class MoviePatchDTO {
 
     private String title;
     private String country;
@@ -18,9 +18,4 @@ public class MovieCreateDTO {
     private String description;
     private List<Director> directors;
 
-
-    public static Movie convertMovieCreateDTOToMovie(MovieCreateDTO movieCreateDTO){
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(movieCreateDTO, Movie.class);
-    }
 }

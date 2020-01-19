@@ -1,11 +1,13 @@
 package com.solvve.movies.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Setter
+@Getter
 @Entity
 public class Movie {
 
@@ -15,8 +17,8 @@ public class Movie {
     private String title;
     private String country;
     private String genre;
-    private int year;
-    private int duration;
+    private Integer year;
+    private Integer duration;
     private String description;
     @ManyToMany(cascade = {
             CascadeType.PERSIST,

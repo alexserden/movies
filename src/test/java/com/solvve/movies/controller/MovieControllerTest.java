@@ -19,8 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -108,5 +107,14 @@ public class MovieControllerTest {
 
         MovieReadDTO actualRead = objectMapper.readValue(resultJson, MovieReadDTO.class);
         Assertions.assertThat(actualRead).isEqualToComparingFieldByField(read);
+    }
+
+    @Test
+    public void testDeleteMovie() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        mvc.perform(delete("/api/v1/movies/{id}", id.toString())).andExpect(status().isOk());
+
+        Mockito.verify(movieService).deleteMovie(id);
     }
 }
