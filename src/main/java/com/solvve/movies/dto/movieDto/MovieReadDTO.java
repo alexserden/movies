@@ -1,4 +1,4 @@
-package com.solvve.movies.dto;
+package com.solvve.movies.dto.movieDto;
 
 import com.solvve.movies.domain.Director;
 import com.solvve.movies.domain.Movie;

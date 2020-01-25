@@ -2,9 +2,9 @@ package com.solvve.movies.service;
 
 import com.solvve.movies.domain.Director;
 import com.solvve.movies.domain.Movie;
-import com.solvve.movies.dto.MovieCreateDTO;
-import com.solvve.movies.dto.MoviePatchDTO;
-import com.solvve.movies.dto.MovieReadDTO;
+import com.solvve.movies.dto.movieDto.MovieCreateDTO;
+import com.solvve.movies.dto.movieDto.MoviePatchDTO;
+import com.solvve.movies.dto.movieDto.MovieReadDTO;
 import com.solvve.movies.exception.EntityNotFoundException;
 import com.solvve.movies.repository.MovieRepository;
 import org.assertj.core.api.Assertions;
@@ -32,6 +32,9 @@ public class MovieServiceTest {
 
     @Autowired
     MovieService movieService;
+
+    @Autowired
+    DirectorService directorService;
 
     @Test
     public void testGetMovie(){
@@ -68,7 +71,10 @@ public class MovieServiceTest {
 
     @Test
     public void testPatchMovie() {
+
+
         Movie m =  createMovie();
+       m = movieRepository.save(m);
         MoviePatchDTO moviePatchDTO = new MoviePatchDTO();
         moviePatchDTO.setTitle("Second at home");
         moviePatchDTO.setCountry("UK");
@@ -76,14 +82,17 @@ public class MovieServiceTest {
         moviePatchDTO.setYear(1998);
         moviePatchDTO.setDuration(234345);
         moviePatchDTO.setDescription("This drama");
-        List<Director> directors = new ArrayList<>();
-        moviePatchDTO.setDirectors(directors);
+        List<Director> directorList =new ArrayList<>();
+        moviePatchDTO.setDirectors(directorList);
+
+
         MovieReadDTO readDTO = movieService.patchMovie(m.getId(),moviePatchDTO);
+
 
         Assertions.assertThat(moviePatchDTO).isEqualToComparingFieldByField(readDTO);
 
         m = movieRepository.findById(readDTO.getId()).get();
-      //  Assertions.assertThat(m).isEqualToComparingFieldByField(readDTO);
+        Assertions.assertThat(m).isEqualToComparingFieldByField(readDTO);
     }
 
     @Test
@@ -110,7 +119,7 @@ public class MovieServiceTest {
         Assert.assertNotNull(movieAfterUpdate.getDescription());
         Assert.assertNotNull(movieAfterUpdate.getDirectors());
 
-      // Assertions.assertThat(m).isEqualToComparingFieldByField(movieAfterUpdate);
+      Assertions.assertThat(read).isEqualToComparingFieldByField(movieAfterUpdate);
     }
 
     @Test
@@ -125,6 +134,7 @@ public class MovieServiceTest {
     public void testDeleteMovieNotFound() {
         movieService.deleteMovie(UUID.randomUUID());
     }
+
     private Movie createMovie() {
         Movie m = new Movie();
         m.setTitle("One at home");
@@ -133,9 +143,14 @@ public class MovieServiceTest {
         m.setYear(1992);
         m.setDuration(2345);
         m.setDescription("This comedy for family");
-        List<Director> directors = new ArrayList<>();
-        m.setDirectors(directors);
+
+        Director dr = new Director();
+        dr.setName("Rok");
+        List<Director> d = new ArrayList<>();
+
+        m.setDirectors(d);
         movieRepository.save(m);
+
         return m;
     }
 }

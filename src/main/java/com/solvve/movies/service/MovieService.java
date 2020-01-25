@@ -1,9 +1,9 @@
 package com.solvve.movies.service;
 
 import com.solvve.movies.domain.Movie;
-import com.solvve.movies.dto.MovieCreateDTO;
-import com.solvve.movies.dto.MoviePatchDTO;
-import com.solvve.movies.dto.MovieReadDTO;
+import com.solvve.movies.dto.movieDto.MovieCreateDTO;
+import com.solvve.movies.dto.movieDto.MoviePatchDTO;
+import com.solvve.movies.dto.movieDto.MovieReadDTO;
 import com.solvve.movies.exception.EntityNotFoundException;
 import com.solvve.movies.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +57,8 @@ public class MovieService {
     }
 
     private Movie getMovieRequired(UUID id) {
-       return movieRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException(Movie.class, id);
-        });
+       return movieRepository.findById(id).orElseThrow(() ->
+              new EntityNotFoundException(Movie.class, id)
+        );
     }
 }

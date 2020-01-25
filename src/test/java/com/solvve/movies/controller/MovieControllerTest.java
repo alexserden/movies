@@ -2,8 +2,8 @@ package com.solvve.movies.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solvve.movies.domain.Movie;
-import com.solvve.movies.dto.MovieCreateDTO;
-import com.solvve.movies.dto.MovieReadDTO;
+import com.solvve.movies.dto.movieDto.MovieCreateDTO;
+import com.solvve.movies.dto.movieDto.MovieReadDTO;
 import com.solvve.movies.exception.EntityNotFoundException;
 import com.solvve.movies.service.MovieService;
 import org.assertj.core.api.Assertions;
